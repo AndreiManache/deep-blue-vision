@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { ApiError, loginAccount, registerAccount } from "../lib/api/client";
+import { Logo } from "./Logo";
+
 
 interface AuthGateProps {
   onAuthed: (username: string) => void;
@@ -50,11 +52,12 @@ export function AuthGate({ onAuthed }: AuthGateProps) {
         onSubmit={handleSubmit}
       >
         <div className="grid size-12 place-items-center rounded-2xl bg-coral/10">
-          <span className="size-5 rounded-full bg-coral" />
+          <Logo className="size-7" title="Deep Blue" />
         </div>
-        <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-ink">
+        <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-ink">
           {isLogin ? "Log in" : "Create account"}
         </h1>
+
         <p className="mt-1 text-sm font-medium text-ink/50">
           {isLogin
             ? "Welcome back to Deep Blue. Log in to continue."

@@ -5,15 +5,17 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Deep Blue — "Chunky Candy" design system.
- * Light cream canvas, ink text, coral primary with sun/leaf/sky accents.
- * Display: Baloo 2 · Body: Nunito (loaded via <link> in src/routes/__root.tsx).
+ * Deep Blue — brand design system.
+ * Semantic contrast: a cold name, a warm mark. Ember primary, amber secondary,
+ * warm ink on bone/cream surfaces.
+ * Display: Sora · Body: Manrope (loaded via <link> in src/routes/__root.tsx).
  */
 
 @theme {
-  --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
-  --font-body: "Nunito", ui-rounded, system-ui, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
 }
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 6px);
@@ -48,6 +50,10 @@
   --color-sun: var(--sun);
   --color-leaf: var(--leaf);
   --color-sky: var(--sky);
+  --color-bone: var(--bone);
+  --color-ember: var(--coral);
+  --color-amber: var(--sun);
+
   --color-chart-1: var(--coral);
   --color-chart-2: var(--sun);
   --color-chart-3: var(--leaf);
@@ -64,15 +70,19 @@
 }
 
 :root {
-  --radius: 1.125rem;
-  --cream: oklch(0.992 0.003 286);
-  --ink: oklch(0.21 0.035 282);
-  --ink3: oklch(0.953 0.013 292);
-  --coral: oklch(0.698 0.187 22.6);
-  --sun: oklch(0.815 0.155 84);
-  --leaf: oklch(0.69 0.165 145);
-  --sky: oklch(0.64 0.185 256);
-  --ring-track: oklch(0.21 0.035 282 / 7%);
+  --radius: 1rem;
+  /* Cream = page canvas · Bone = quiet surface · Ink = warm near-black */
+  --cream: oklch(0.985 0.004 80);
+  --bone: oklch(0.955 0.008 80);
+  --ink: oklch(0.195 0.014 60);
+  --ink3: oklch(0.955 0.008 80);
+  /* Ember (primary) → Amber (secondary): the warm mark against the cold name */
+  --coral: oklch(0.655 0.185 28);
+  --sun: oklch(0.795 0.155 68);
+  --leaf: oklch(0.655 0.125 152);
+  --sky: oklch(0.615 0.125 250);
+  --ring-track: oklch(0.195 0.014 60 / 8%);
+
   --background: var(--cream);
   --foreground: var(--ink);
   --card: oklch(1 0 0);
@@ -84,13 +94,13 @@
   --secondary: var(--ink3);
   --secondary-foreground: var(--ink);
   --muted: var(--ink3);
-  --muted-foreground: oklch(0.556 0.03 285);
+  --muted-foreground: oklch(0.545 0.018 60);
   --accent: var(--ink3);
   --accent-foreground: var(--ink);
   --destructive: var(--coral);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.21 0.035 282 / 8%);
-  --input: oklch(0.21 0.035 282 / 8%);
+  --border: oklch(0.195 0.014 60 / 9%);
+  --input: oklch(0.195 0.014 60 / 9%);
   --ring: var(--coral);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: var(--ink);
@@ -98,7 +108,7 @@
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: var(--ink3);
   --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: oklch(0.21 0.035 282 / 8%);
+  --sidebar-border: oklch(0.195 0.014 60 / 9%);
   --sidebar-ring: var(--coral);
 }
 
@@ -115,13 +125,13 @@
   --secondary: var(--ink3);
   --secondary-foreground: var(--ink);
   --muted: var(--ink3);
-  --muted-foreground: oklch(0.556 0.03 285);
+  --muted-foreground: oklch(0.545 0.018 60);
   --accent: var(--ink3);
   --accent-foreground: var(--ink);
   --destructive: var(--coral);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.21 0.035 282 / 8%);
-  --input: oklch(0.21 0.035 282 / 8%);
+  --border: oklch(0.195 0.014 60 / 9%);
+  --input: oklch(0.195 0.014 60 / 9%);
   --ring: var(--coral);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: var(--ink);
@@ -129,7 +139,7 @@
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: var(--ink3);
   --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: oklch(0.21 0.035 282 / 8%);
+  --sidebar-border: oklch(0.195 0.014 60 / 9%);
   --sidebar-ring: var(--coral);
 }
 

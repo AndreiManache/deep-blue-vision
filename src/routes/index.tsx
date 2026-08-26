@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useApp } from "../components/AppShell";
 import { HamburgerMenu } from "../components/HamburgerMenu";
+import { Logo } from "../components/Logo";
+
 import { TalkButton } from "../components/TalkButton";
 import { MicPermissionHelp } from "../components/MicPermissionHelp";
 import { ErrorBanner } from "../components/ErrorBanner";
@@ -53,19 +55,23 @@ function HomePage() {
     <div className="flex min-h-dvh flex-col px-6 pb-10 pt-5">
       <header className="flex items-center justify-between">
         <HamburgerMenu onLogout={() => void logout()} />
-        <div className="text-right">
-          <div className="font-display text-xl font-extrabold tracking-tight text-ink">
-            Deep Blue
+        <div className="flex items-center gap-2.5">
+          <div className="text-right">
+            <div className="font-display text-lg font-bold tracking-tight text-ink">
+              Deep Blue
+            </div>
+            <div className="text-xs font-semibold text-ink/40">
+              {new Date().toLocaleDateString(undefined, {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+              })}
+            </div>
           </div>
-          <div className="text-xs font-semibold text-ink/40">
-            {new Date().toLocaleDateString(undefined, {
-              weekday: "long",
-              month: "short",
-              day: "numeric",
-            })}
-          </div>
+          <Logo className="size-8" title="Deep Blue" />
         </div>
       </header>
+
 
       <main className="flex flex-1 flex-col items-center justify-center gap-8 py-8">
         {phase === "unsupported" ? (
