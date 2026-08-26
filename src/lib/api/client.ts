@@ -58,7 +58,7 @@ export class ApiError extends Error {}
 // so the frontend can call it cross-origin. Override with VITE_API_BASE_URL
 // when pointing at a different deployment; defaults to the live server.
 const API_BASE: string =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") ??
+  (import.meta.env["VITE_API_BASE_URL"] as string | undefined)?.replace(/\/$/, "") ??
   "https://deep-blue-production.up.railway.app";
 
 const SESSION_TOKEN_KEY = "deepblue_session_token";
@@ -133,7 +133,7 @@ export async function logout(): Promise<void> {
   try {
     await fetch(`${API_BASE}/auth/logout`, {
       method: "POST",
-      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
   } catch {
     /* offline or server down — local clear below is what matters */
