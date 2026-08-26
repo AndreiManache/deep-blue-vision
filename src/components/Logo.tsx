@@ -1,13 +1,11 @@
 import { useId } from "react";
 
 /**
- * Deep Blue brand mark — "The Ember Dot".
+ * Deep Blue brand mark — "The Ink Dot".
  *
  * Semantic contrast: the name reads cold, submerged, machine-like; the mark
- * answers with a single warm point of light. One perfect circle on a 64
- * grid, filled with the ember→amber gradient. Nothing else. The restraint
- * is the idea: deep blue is the ocean you don't see; the dot is the spark
- * you do.
+ * answers with a single quiet point. One perfect circle on a 64 grid, filled
+ * with warm Ink. Nothing else. The warmth lives in the voice orb, not the logo.
  */
 
 /** The mark is a perfect circle, r=24, centred on a 64×64 grid. */
@@ -26,14 +24,7 @@ export function Logo({
   tone?: Tone;
   title?: string;
 }) {
-  const id = useId();
-  const gradientId = `ember-${id}`;
-  const fill =
-    tone === "brand"
-      ? `url(#${gradientId})`
-      : tone === "ink"
-        ? "var(--ink)"
-        : "var(--cream)";
+  const fill = tone === "light" ? "var(--cream)" : "var(--ink)";
 
   return (
     <svg
@@ -43,20 +34,12 @@ export function Logo({
       aria-label={title}
       aria-hidden={title ? undefined : true}
     >
-      {tone === "brand" && (
-        <defs>
-          <radialGradient id={gradientId} cx="0.38" cy="0.34" r="0.85">
-            <stop offset="0%" stopColor="var(--sun)" />
-            <stop offset="100%" stopColor="var(--coral)" />
-          </radialGradient>
-        </defs>
-      )}
       <circle cx={MARK_CX} cy={MARK_CY} r={MARK_RADIUS} fill={fill} />
     </svg>
   );
 }
 
-/** Horizontal lockup: mark + wordmark. The dot doubles as the full stop. */
+/** Horizontal lockup: mark + wordmark. */
 export function Wordmark({
   className = "",
   tone = "brand",
