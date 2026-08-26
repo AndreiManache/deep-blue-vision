@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useApp } from "../components/AppShell";
 import { HamburgerMenu } from "../components/HamburgerMenu";
 import { Logo } from "../components/Logo";
+import { Greeting } from "../components/Greeting";
 
 import { TalkButton } from "../components/TalkButton";
 import { MicPermissionHelp } from "../components/MicPermissionHelp";
