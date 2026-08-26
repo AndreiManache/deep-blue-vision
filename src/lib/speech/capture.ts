@@ -137,7 +137,7 @@ export class SpeechCapture {
       this.analyser.getByteTimeDomainData(buf);
       let sum = 0;
       for (let i = 0; i < buf.length; i++) {
-        const x = (buf[i] - 128) / 128;
+        const x = ((buf[i] ?? 128) - 128) / 128;
         sum += x * x;
       }
       const rms = Math.sqrt(sum / buf.length);
