@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useApp } from "../components/AppShell";
 import { HamburgerMenu } from "../components/HamburgerMenu";
 import { Logo } from "../components/Logo";
+import { Greeting } from "../components/Greeting";
 
 import { TalkButton } from "../components/TalkButton";
 import { MicPermissionHelp } from "../components/MicPermissionHelp";
@@ -56,17 +57,8 @@ function HomePage() {
       <header className="flex items-center justify-between">
         <HamburgerMenu onLogout={() => void logout()} />
         <div className="flex items-center gap-2.5">
-          <div className="text-right">
-            <div className="font-display text-lg font-bold tracking-tight text-ink">
-              Deep Blue
-            </div>
-            <div className="text-xs font-semibold text-ink/40">
-              {new Date().toLocaleDateString(undefined, {
-                weekday: "long",
-                month: "short",
-                day: "numeric",
-              })}
-            </div>
+          <div className="font-display text-lg font-bold lowercase tracking-tight text-ink">
+            deep blue
           </div>
           <Logo className="size-8" title="Deep Blue" />
         </div>
@@ -90,6 +82,7 @@ function HomePage() {
           </div>
         ) : (
           <>
+            <Greeting />
             <TalkButton phase={phase} onTap={handleTap} />
             <p className="min-h-6 text-center text-sm font-semibold text-ink/50">
               {HINTS[phase] ??
