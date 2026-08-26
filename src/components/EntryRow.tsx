@@ -2,32 +2,18 @@ import { useEffect, useState } from "react";
 import { Check, Pencil, Trash2, X } from "lucide-react";
 import {
   ApiError,
-  deleteEntry,
+  editEntry,
+  removeEntry,
   timeLabel,
-  updateEntry,
-  type DayEntry,
+  type FoodEntry,
 } from "../lib/api/client";
 import { cn } from "../lib/utils";
 
 interface EntryRowProps {
-  entry: DayEntry;
+  entry: FoodEntry;
   onChanged: () => void;
   onMutated?: () => void;
 }
-
-const MEAL_COLORS: Record<string, string> = {
-  Breakfast: "bg-sky",
-  Lunch: "bg-leaf",
-  Dinner: "bg-coral",
-  Snack: "bg-sun",
-  Meal: "bg-ink/20",
-};
-
-const MACRO_ORDER = [
-  { key: "protein_g", label: "Protein (g)" },
-  { key: "carbs_g", label: "Carbs (g)" },
-  { key: "fat_g", label: "Fat (g)" },
-] as const;
 
 const inputClass =
   "w-full rounded-xl bg-white px-3 py-2.5 text-sm font-semibold text-ink shadow-sm ring-1 ring-ink/10 outline-none placeholder:font-medium placeholder:text-ink/30 focus:ring-2 focus:ring-coral/50";
@@ -40,44 +26,28 @@ export function EntryRow({ entry, onChanged, onMutated }: EntryRowProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
-    label: entry.label,
-    kcal: entry.kcal != null ? String(entry.kcal) : "",
-    protein_g: entry.protein_g != null ? String(entry.protein_g) : "",
-    carbs_g: entry.carbs_g != null ? String(entry.carbs_g) : "",
-    fat_g: entry.fat_g != null ? String(entry.fat_g) : "",
+    description: entry.description,
+    calories: String(entry.calories ?? ""),
   });
 
   useEffect(() => {
     setForm({
-      label: entry.label,
-      kcal: entry.kcal != null ? String(entry.kcal) : "",
-      protein_g: entry.protein_g != null ? String(entry.protein_g) : "",
-      carbs_g: entry.carbs_g != null ? String(entry.carbs_g) : "",
-      fat_g: entry.fat_g != null ? String(entry.fat_g) : "",
+      description: entry.description,
+      calories: String(entry.calories ?? ""),
     });
     setError(null);
     setConfirmingDelete(false);
   }, [entry]);
-
-  function setField(field: keyof typeof form, value: string) {
-    setForm((f) => ({ ...f, [field]: value }));
-  }
 
   async function handleSave() {
     if (busy) return;
     setBusy(true);
     setError(null);
     try {
-      const toNumber = (v: string) => {
-        const n = Number(v);
-        return v.trim() === "" || Number.isNaN(n) ? null : n;
-      };
-      await updateEntry(entry.id, {
-        label: form.label.trim() || entry.label,
-        kcal: toNumber(form.kcal),
-        protein_g: toNumber(form.protein_g),
-        carbs_g: toNumber(form.carbs_g),
-        fat_g: toNumber(form.fat_g),
+      const kcal = Number(form.calories);
+      await editEntry(entry.id, {
+        description: form.description.trim() || entry.description,
+        ...(form.calories.trim() !== "" && !Number.isNaN(kcal) ? { calories: kcal } : {}),
       });
       setEditing(false);
       onChanged();
@@ -98,7 +68,7 @@ export function EntryRow({ entry, onChanged, onMutated }: EntryRowProps) {
     setBusy(true);
     setError(null);
     try {
-      await deleteEntry(entry.id);
+      await removeEntry(entry.id);
       setEditing(false);
       onChanged();
       onMutated?.();
@@ -111,50 +81,26 @@ export function EntryRow({ entry, onChanged, onMutated }: EntryRowProps) {
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-3 py-3",
-        editing && "rounded-2xl bg-ink3 px-3",
-      )}
-    >
-      <div
-        className={cn(
-          "size-2.5 shrink-0 rounded-full",
-          MEAL_COLORS[entry.meal_slot ?? "Meal"] ?? "bg-ink/20",
-        )}
-        title={entry.meal_slot ?? "Meal"}
-      />
+    <div className={cn("flex items-center gap-3 py-3", editing && "rounded-2xl bg-ink3 px-3")}>
+      <div className="size-2.5 shrink-0 rounded-full bg-coral" />
       <div className="min-w-0 flex-1">
         {editing ? (
           <div className="space-y-2">
             <input
-              value={form.label}
-              onChange={(e) => setField("label", e.target.value)}
-              placeholder="Label"
+              value={form.description}
+              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              placeholder="Description"
               className={inputClass}
-              aria-label="Entry label"
+              aria-label="Entry description"
             />
             <input
-              value={form.kcal}
-              onChange={(e) => setField("kcal", e.target.value)}
+              value={form.calories}
+              onChange={(e) => setForm((f) => ({ ...f, calories: e.target.value }))}
               placeholder="kcal"
               inputMode="decimal"
               className={inputClass}
               aria-label="Calories"
             />
-            <div className="grid grid-cols-3 gap-2">
-              {MACRO_ORDER.map(({ key, label }) => (
-                <input
-                  key={key}
-                  value={form[key]}
-                  onChange={(e) => setField(key, e.target.value)}
-                  placeholder={label}
-                  inputMode="decimal"
-                  className={inputClass}
-                  aria-label={label}
-                />
-              ))}
-            </div>
             {error && (
               <div className="rounded-xl bg-coral/10 px-3 py-2 text-xs font-semibold text-coral">
                 {error}
@@ -180,10 +126,15 @@ export function EntryRow({ entry, onChanged, onMutated }: EntryRowProps) {
         ) : (
           <>
             <div className="truncate text-sm font-bold text-ink">
-              {entry.label || "(untitled)"}
+              {entry.description || "(untitled)"}
+              {entry.edited && (
+                <span className="ml-1.5 text-[10px] font-semibold uppercase text-ink/35">
+                  edited
+                </span>
+              )}
             </div>
             <div className="text-xs font-medium text-ink/45">
-              {entry.kcal != null ? `${Math.round(entry.kcal)} kcal` : "—"}
+              {Math.round(entry.calories || 0)} kcal
               {entry.protein_g != null && ` · P ${Math.round(entry.protein_g)}`}
               {entry.carbs_g != null && ` · C ${Math.round(entry.carbs_g)}`}
               {entry.fat_g != null && ` · F ${Math.round(entry.fat_g)}`}
