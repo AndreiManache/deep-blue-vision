@@ -18,7 +18,7 @@
 
 export interface SpeakOptions {
   onEnd: () => void;
-  audioBase64?: string | null;
+  audioBase64?: string | null | undefined;
   /** BCP-47 tag (e.g. "ro-RO") — without it the fallback voice reads Romanian text with English phonemes. */
   lang?: string;
 }

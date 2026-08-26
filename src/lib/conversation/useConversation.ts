@@ -62,7 +62,7 @@ export function useConversation(): ConversationApi {
 
   function logDiag(label: string, detail?: string) {
     setDiagnostics((prev) => {
-      const next = [...prev, { t: Date.now(), label, detail }];
+      const next = [...prev, { t: Date.now(), label, ...(detail !== undefined ? { detail } : {}) }];
       return next.length > 300 ? next.slice(next.length - 300) : next;
     });
   }
