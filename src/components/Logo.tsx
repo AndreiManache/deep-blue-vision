@@ -1,21 +1,19 @@
 import { useId } from "react";
 
 /**
- * Deep Blue brand mark — "The Spark Seed".
+ * Deep Blue brand mark — "The Ember Dot".
  *
  * Semantic contrast: the name reads cold, submerged, machine-like; the mark
- * answers with a warm, sharp, upward spark. Built strictly from two circular
- * arcs (r = 36 on a 64 grid) meeting at two points, with a smaller offset
- * spark cut out of it as negative space.
+ * answers with a single warm point of light. One perfect circle on a 64
+ * grid, filled with the ember→amber gradient. Nothing else. The restraint
+ * is the idea: deep blue is the ocean you don't see; the dot is the spark
+ * you do.
  */
 
-/** Outer seed: two arcs (r=38) meeting at two sharp points. */
-export const MARK_OUTER = "M32 2 A38 38 0 0 1 32 62 A38 38 0 0 1 32 2 Z";
-/** Inner spark cut out with evenodd, leaving an aperture of negative space. */
-export const MARK_INNER = "M32 17 A24 24 0 0 1 32 47 A24 24 0 0 1 32 17 Z";
-/** The whole mark leans forward — motion, not stillness. */
-export const MARK_TILT = -34;
-
+/** The mark is a perfect circle, r=24, centred on a 64×64 grid. */
+export const MARK_RADIUS = 24;
+export const MARK_CX = 32;
+export const MARK_CY = 32;
 
 type Tone = "brand" | "ink" | "light";
 
@@ -29,7 +27,7 @@ export function Logo({
   title?: string;
 }) {
   const id = useId();
-  const gradientId = `spark-${id}`;
+  const gradientId = `ember-${id}`;
   const fill =
     tone === "brand"
       ? `url(#${gradientId})`
@@ -47,21 +45,18 @@ export function Logo({
     >
       {tone === "brand" && (
         <defs>
-          <linearGradient id={gradientId} x1="0.1" y1="1" x2="0.9" y2="0.05">
-            <stop offset="0%" stopColor="var(--coral)" />
-            <stop offset="100%" stopColor="var(--sun)" />
-          </linearGradient>
+          <radialGradient id={gradientId} cx="0.38" cy="0.34" r="0.85">
+            <stop offset="0%" stopColor="var(--sun)" />
+            <stop offset="100%" stopColor="var(--coral)" />
+          </radialGradient>
         </defs>
       )}
-      <g transform={`rotate(${MARK_TILT} 32 32)`}>
-        <path d={`${MARK_OUTER} ${MARK_INNER}`} fillRule="evenodd" fill={fill} />
-      </g>
-
+      <circle cx={MARK_CX} cy={MARK_CY} r={MARK_RADIUS} fill={fill} />
     </svg>
   );
 }
 
-/** Horizontal lockup: mark + wordmark. */
+/** Horizontal lockup: mark + wordmark. The dot doubles as the full stop. */
 export function Wordmark({
   className = "",
   tone = "brand",
@@ -73,11 +68,11 @@ export function Wordmark({
     <div className={`flex items-center gap-2.5 ${className}`}>
       <Logo className="size-7" tone={tone} title="Deep Blue" />
       <span
-        className={`font-display text-lg font-bold tracking-tight ${
+        className={`font-display text-lg font-bold lowercase tracking-tight ${
           tone === "light" ? "text-cream" : "text-ink"
         }`}
       >
-        Deep&nbsp;Blue
+        deep&nbsp;blue
       </span>
     </div>
   );
