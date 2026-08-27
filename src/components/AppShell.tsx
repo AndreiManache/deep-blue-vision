@@ -46,16 +46,16 @@ export function AppShell({ children }: { children: ReactNode }) {
     await logoutRequest();
   }
 
-  if (!authed) {
-    return <AuthGate onAuthed={() => setAuthed(true)} />;
-  }
-
   return (
     <AppContext.Provider value={{ conversation, logout: handleLogout }}>
-      <div className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col">
-        {children}
-        <ConversationPill />
-      </div>
+      {authed ? (
+        <div className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col">
+          {children}
+          <ConversationPill />
+        </div>
+      ) : (
+        <AuthGate onAuthed={() => setAuthed(true)} />
+      )}
     </AppContext.Provider>
   );
 }
