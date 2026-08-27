@@ -133,11 +133,23 @@ export function EntryRow({ entry, onChanged, onMutated }: EntryRowProps) {
                 </span>
               )}
             </div>
-            <div className="text-xs font-medium text-ink/45">
-              {Math.round(entry.calories || 0)} kcal
-              {entry.protein_g != null && ` · P ${Math.round(entry.protein_g)}`}
-              {entry.carbs_g != null && ` · C ${Math.round(entry.carbs_g)}`}
-              {entry.fat_g != null && ` · F ${Math.round(entry.fat_g)}`}
+            <div className="flex items-center gap-1.5 text-xs font-medium text-ink/45">
+              <span>
+                {Math.round(entry.calories || 0)} kcal
+                {entry.protein_g != null && ` · P ${Math.round(entry.protein_g)}`}
+                {entry.carbs_g != null && ` · C ${Math.round(entry.carbs_g)}`}
+                {entry.fat_g != null && ` · F ${Math.round(entry.fat_g)}`}
+              </span>
+              {entry.source === "verified" && (
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-leaf/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-leaf">
+                  ✓ verified{entry.agreement_count ? ` ${entry.agreement_count}` : ""}
+                </span>
+              )}
+              {entry.source === "yours" && (
+                <span className="inline-flex items-center rounded-full bg-ink/8 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-ink/45">
+                  your value
+                </span>
+              )}
             </div>
           </>
         )}
