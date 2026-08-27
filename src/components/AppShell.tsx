@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import {
@@ -6,21 +6,13 @@ import {
   logout as logoutRequest,
   SESSION_INVALIDATED_EVENT,
 } from "../lib/api/client";
-import { useConversation, type ConversationApi, type Phase } from "../lib/conversation/useConversation";
+import { useConversation, type Phase } from "../lib/conversation/useConversation";
 import { AuthGate } from "./AuthGate";
+import { AppContext, useApp } from "./app-context";
 
-interface AppContextValue {
-  conversation: ConversationApi;
-  logout: () => Promise<void>;
-}
+export { useApp };
+export type { AppContextValue } from "./app-context";
 
-const AppContext = createContext<AppContextValue | null>(null);
-
-export function useApp(): AppContextValue {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error("useApp must be used inside AppShell");
-  return ctx;
-}
 
 const PILL_LABELS: Partial<Record<Phase, string>> = {
   "awaiting-mic": "Allow mic…",
@@ -54,16 +46,16 @@ export function AppShell({ children }: { children: ReactNode }) {
     await logoutRequest();
   }
 
-  if (!authed) {
-    return <AuthGate onAuthed={() => setAuthed(true)} />;
-  }
-
   return (
     <AppContext.Provider value={{ conversation, logout: handleLogout }}>
-      <div className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col">
-        {children}
-        <ConversationPill />
-      </div>
+      {authed ? (
+        <div className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col">
+          {children}
+          <ConversationPill />
+        </div>
+      ) : (
+        <AuthGate onAuthed={() => setAuthed(true)} />
+      )}
     </AppContext.Provider>
   );
 }
